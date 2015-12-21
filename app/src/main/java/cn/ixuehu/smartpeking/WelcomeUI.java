@@ -1,6 +1,7 @@
 package cn.ixuehu.smartpeking;
 
 import android.app.Activity;
+import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
@@ -72,14 +73,14 @@ public class WelcomeUI extends Activity {
         if (isFirstStart)
         {
             Log.d(TAG, "进入引导页面");
-            //Intent intent = new Intent(this, GuideUI.class);
-            //startActivity(intent);
+            Intent intent = new Intent(this, GuideUI.class);
+            startActivity(intent);
         }
         else
         {
             Log.d(TAG, "进入主页面");
-            //Intent intent = new Intent(this, MainUI.class);
-            //startActivity(intent);
+            Intent intent = new Intent(this, MainUI.class);
+            startActivity(intent);
         }
 
         finish();
