@@ -6,7 +6,7 @@ import android.content.SharedPreferences.Editor;
 
 public class CacheUtils
 {
-	private final static String			SP_NAME	= "zhbj56";
+	private final static String			SP_NAME	= "smartpeking";
 	private static SharedPreferences	mPreferences;		// SharedPreferences的实例
 
 	private static SharedPreferences getSp(Context context)
