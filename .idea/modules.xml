@@ -4,6 +4,8 @@
     <modules>
       <module fileurl="file://$PROJECT_DIR$/SmartPeking.iml" filepath="$PROJECT_DIR$/SmartPeking.iml" />
       <module fileurl="file://$PROJECT_DIR$/app/app.iml" filepath="$PROJECT_DIR$/app/app.iml" />
+      <module fileurl="file://$PROJECT_DIR$/slidingMenu_lib/slidingMenu_lib.iml" filepath="$PROJECT_DIR$/slidingMenu_lib/slidingMenu_lib.iml" />
+      <module fileurl="file://$PROJECT_DIR$/xUtils_lib/xUtils_lib.iml" filepath="$PROJECT_DIR$/xUtils_lib/xUtils_lib.iml" />
     </modules>
   </component>
 </project>
