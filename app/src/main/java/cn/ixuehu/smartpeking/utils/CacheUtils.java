@@ -1,4 +1,4 @@
-package utils;
+package cn.ixuehu.smartpeking.utils;
 
 import android.content.Context;
 import android.content.SharedPreferences;

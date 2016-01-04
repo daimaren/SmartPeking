@@ -17,6 +17,7 @@ android {
             proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
         }
     }
+    useLibrary 'org.apache.http.legacy'
 }
 
 dependencies {
@@ -26,4 +27,5 @@ dependencies {
     compile 'com.android.support:design:23.1.0'
     compile project(':slidingMenu_lib')
     compile project(':xUtils_lib')
+    compile files('libs/gson-2.2.1.jar')
 }

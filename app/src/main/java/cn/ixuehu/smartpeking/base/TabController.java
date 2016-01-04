@@ -83,4 +83,13 @@ public abstract class TabController
 	{
 
 	}
+
+	/**
+	 * 初始化数据的方法，子类如果需要数据初始化，就复写
+	 */
+	public void switchMenu(int position)
+	{
+		// TODO Auto-generated method stub
+
+	}
 }

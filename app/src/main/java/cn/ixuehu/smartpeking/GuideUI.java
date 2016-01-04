@@ -17,7 +17,7 @@ import android.widget.RelativeLayout;
 import java.util.ArrayList;
 import java.util.List;
 
-import utils.CacheUtils;
+import cn.ixuehu.smartpeking.utils.CacheUtils;
 
 public class GuideUI extends Activity implements View.OnClickListener,ViewPager.OnPageChangeListener {
     private ViewPager mPager;			// 页面中的Viewpager

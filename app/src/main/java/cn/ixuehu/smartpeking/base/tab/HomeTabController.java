@@ -38,13 +38,17 @@ public class HomeTabController extends TabController
 		tv.setTextSize(24);
 		tv.setGravity(Gravity.CENTER);
 		tv.setTextColor(Color.RED);
-
 		return tv;
 	}
 
 	@Override
 	public void initData()
 	{
+		//设置menu按钮不可见
+		mIbMenu.setVisibility(View.GONE);
+		//设置Title
+		mTvTitle.setText("智慧北京");
+		//设置内容
 		tv.setText("首页的内容");
 	}
 }

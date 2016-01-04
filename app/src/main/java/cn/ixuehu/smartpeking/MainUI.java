@@ -12,6 +12,7 @@ import cn.ixuehu.smartpeking.fragment.MenuFragment;
 
 public class MainUI extends SlidingFragmentActivity {
     private static final String	TAG_CONTENT	= "content";
+    private static final String	TAG_MENU	= "menu";
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -57,5 +58,26 @@ public class MainUI extends SlidingFragmentActivity {
 
         // 提交事务
         transaction.commit();
+    }
+    /**
+     * 获取菜单fragment
+     *
+     * @return
+     */
+    public MenuFragment getMenuFragment()
+    {
+        FragmentManager manager = getSupportFragmentManager();
+        return (MenuFragment) manager.findFragmentByTag(TAG_MENU);
+    }
+
+    /**
+     * 获取内容fragment
+     *
+     * @return
+     */
+    public ContentFragment getContentFragment()
+    {
+        FragmentManager manager = getSupportFragmentManager();
+        return (ContentFragment) manager.findFragmentByTag(TAG_CONTENT);
     }
 }

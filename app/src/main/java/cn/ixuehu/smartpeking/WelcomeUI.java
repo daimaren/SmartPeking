@@ -11,7 +11,7 @@ import android.view.animation.AnimationSet;
 import android.view.animation.RotateAnimation;
 import android.view.animation.ScaleAnimation;
 
-import utils.CacheUtils;
+import cn.ixuehu.smartpeking.utils.CacheUtils;
 
 public class WelcomeUI extends Activity {
     private final static long 	ANIMATION_DURATION	= 1500;
