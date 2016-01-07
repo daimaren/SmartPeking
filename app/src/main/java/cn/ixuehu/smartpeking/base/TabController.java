@@ -6,6 +6,9 @@ import android.widget.FrameLayout;
 import android.widget.ImageButton;
 import android.widget.TextView;
 
+import com.jeremyfeinstein.slidingmenu.lib.SlidingMenu;
+
+import cn.ixuehu.smartpeking.MainUI;
 import cn.ixuehu.smartpeking.R;
 
 /**
@@ -21,7 +24,7 @@ import cn.ixuehu.smartpeking.R;
  * @更新时间: $Date: 2015-04-22 17:06:53 +0800 (Wed, 22 Apr 2015) $
  * @更新描述: TODO
  */
-public abstract class TabController
+public abstract class TabController implements ImageButton.OnClickListener
 {
 	protected View			mRootView;
 	protected Context		mContext;
@@ -50,7 +53,7 @@ public abstract class TabController
 
 		// 初始化内容的View
 		mContentContainer.addView(initContentView(context));
-
+        mIbMenu.setOnClickListener(this);
 		return view;
 	}
 
@@ -92,4 +95,18 @@ public abstract class TabController
 		// TODO Auto-generated method stub
 
 	}
+
+    @Override
+    public void onClick(View view) {
+        if (view == mIbMenu)
+        {
+            clickMenu();
+        }
+    }
+    private void clickMenu()
+    {
+        // 点击时打开或是关闭菜单
+        SlidingMenu menu = ((MainUI) mContext).getSlidingMenu();
+        menu.toggle();// 如果菜单是打开的时候就关闭，否则相反
+    }
 }

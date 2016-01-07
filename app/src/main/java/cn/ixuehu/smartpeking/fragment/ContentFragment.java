@@ -1,7 +1,6 @@
 package cn.ixuehu.smartpeking.fragment;
 
 import android.support.v4.view.PagerAdapter;
-import android.support.v4.view.ViewPager;
 import android.util.Log;
 import android.view.View;
 import android.view.ViewGroup;
@@ -22,6 +21,7 @@ import cn.ixuehu.smartpeking.base.tab.HomeTabController;
 import cn.ixuehu.smartpeking.base.tab.NewsCenterTabController;
 import cn.ixuehu.smartpeking.base.tab.SettingTabController;
 import cn.ixuehu.smartpeking.base.tab.SmartServiceTabController;
+import cn.ixuehu.smartpeking.widget.NoScrollViewPager;
 
 /**
  * @项目名: Zhbj56
@@ -40,7 +40,7 @@ public class ContentFragment extends BaseFragment
 {
     public static final String	TAG	= "ContentFragment";
 	@ViewInject(R.id.content_pager)
-	private ViewPager			mPager;		// ViewPager
+	private NoScrollViewPager mPager;		// ViewPager
     @ViewInject(R.id.content_rg)
     private RadioGroup mRadioGroup;
     private int					mCurrentTab;

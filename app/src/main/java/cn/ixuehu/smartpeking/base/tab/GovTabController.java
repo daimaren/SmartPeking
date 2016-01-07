@@ -30,7 +30,7 @@ public class GovTabController extends TabController{
 
     @Override
     public void initData() {
-        mIbMenu.setVisibility(View.GONE);
+        mIbMenu.setVisibility(View.VISIBLE);
         mTvTitle.setText("人口管理");
         tv.setText("政务的内容");
     }

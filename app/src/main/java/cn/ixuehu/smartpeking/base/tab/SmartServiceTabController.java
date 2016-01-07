@@ -31,7 +31,7 @@ public class SmartServiceTabController extends TabController{
 
     @Override
     public void initData() {
-        mIbMenu.setVisibility(View.GONE);
+        mIbMenu.setVisibility(View.VISIBLE);
         mTvTitle.setText("生活");
         tv.setText("智慧服务的内容");
     }

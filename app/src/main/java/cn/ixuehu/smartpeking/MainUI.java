@@ -54,7 +54,7 @@ public class MainUI extends SlidingFragmentActivity {
         transaction.replace(R.id.main_container_content, new ContentFragment(), TAG_CONTENT);
 
         // 加载切换菜单页面
-        transaction.replace(R.id.main_container_menu, new MenuFragment(), TAG_CONTENT);
+        transaction.replace(R.id.main_container_menu, new MenuFragment(), TAG_MENU);
 
         // 提交事务
         transaction.commit();
