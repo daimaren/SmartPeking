@@ -38,7 +38,7 @@ public class NewsMenuController extends MenuController implements ViewPager.OnPa
     private NewsCenterBean.NewsCenterMenuBean mMenuBean;	// 菜单数据
 
     private List<NewsCenterBean.NewsBean> mChildren;	// ViewPager对应的数据
-    private TextView tv;
+
     public NewsMenuController(Context context,NewsCenterBean.NewsCenterMenuBean menuBean) {
         super(context);
 
@@ -48,7 +48,7 @@ public class NewsMenuController extends MenuController implements ViewPager.OnPa
 
     @Override
     protected View initView(Context context) {
-        View view = View.inflate(context,R.layout.newscenter_news,null);
+        View view = View.inflate(mContext,R.layout.newscenter_news,null);
         ViewUtils.inject(this,view);
         return view;
     }
@@ -77,7 +77,7 @@ public class NewsMenuController extends MenuController implements ViewPager.OnPa
         mIndicator.setOnPageChangeListener(this);
     }
     @OnClick(R.id.newscenter_news_arrow)
-    public void Clickarrow(View view)
+    public void ClickArrow(View view)
     {
         //选中下一个
         int item = mPager.getCurrentItem();

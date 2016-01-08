@@ -1,6 +1,7 @@
 package cn.ixuehu.smartpeking.base.tab;
 
 import android.content.Context;
+import android.text.TextUtils;
 import android.util.Log;
 import android.view.View;
 import android.widget.FrameLayout;
@@ -24,13 +25,15 @@ import cn.ixuehu.smartpeking.base.newscenter.PicMenuController;
 import cn.ixuehu.smartpeking.base.newscenter.TopicMenuController;
 import cn.ixuehu.smartpeking.bean.NewsCenterBean;
 import cn.ixuehu.smartpeking.fragment.MenuFragment;
+import cn.ixuehu.smartpeking.utils.CacheUtils;
 import cn.ixuehu.smartpeking.utils.Constans;
 
 /**
  * Created by lenovo on 2016/1/4.
  */
 public class NewsCenterTabController extends TabController{
-    protected static final String TAG= "NewsCenterTabController";
+    private static final String TAG= "NewsCenterTabController";
+    private static final long DELAY_TIME = 2 * 60 * 1000;
     private FrameLayout mContainer;
     private List<MenuController> mMenuControllers;
     private List<NewsCenterBean.NewsCenterMenuBean>  mMenuDatas;
@@ -48,14 +51,28 @@ public class NewsCenterTabController extends TabController{
     public void initData() {
         mIbMenu.setVisibility(View.VISIBLE);
         mTvTitle.setText("新闻");
+
+        final String url = Constans.NEWSCENTER_URL;
+        String json = CacheUtils.getString(mContext,url);
+        long data = CacheUtils.getLong(mContext,url + "_data");
+        //是否为空
+        if (!TextUtils.isEmpty(json))
+        {
+            processData(json);
+            if (System.currentTimeMillis() - data < DELAY_TIME)
+            {
+                return;
+            }
+        }
         HttpUtils utils = new HttpUtils();
 
-        String url = Constans.NEWSCENTER_URL;
         utils.send(HttpRequest.HttpMethod.GET, url, new RequestCallBack<String>() {
             @Override
             public void onSuccess(ResponseInfo<String> responseInfo) {
                 String strResult = responseInfo.result;
                 Log.d(TAG,"接口访问成功:" + strResult);
+                //写入缓存
+                CacheUtils.setString(mContext,url,strResult);
                 //处理数据
                 processData(strResult);
             }
