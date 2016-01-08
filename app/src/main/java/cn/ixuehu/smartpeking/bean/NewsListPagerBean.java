@@ -7,4 +7,5 @@ package cn.ixuehu.smartpeking.bean;
  */
 public class NewsListPagerBean {
 
+
 }
