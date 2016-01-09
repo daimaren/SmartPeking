@@ -21,7 +21,8 @@
             android:label="@string/app_name"/>
         <activity android:name=".MainUI"
             android:label="@string/app_name"
-            android:theme="@style/StyledIndicators"></activity>
+            android:theme="@style/StyledIndicators">
+        </activity>
     </application>
 
 </manifest>

@@ -9,15 +9,12 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
 
-import com.jeremyfeinstein.slidingmenu.lib.SlidingMenu;
 import com.lidroid.xutils.ViewUtils;
 import com.lidroid.xutils.view.annotation.ViewInject;
-import com.lidroid.xutils.view.annotation.event.OnClick;
 import com.viewpagerindicator.TabPageIndicator;
 
 import java.util.List;
 
-import cn.ixuehu.smartpeking.MainUI;
 import cn.ixuehu.smartpeking.R;
 import cn.ixuehu.smartpeking.base.MenuController;
 import cn.ixuehu.smartpeking.bean.NewsCenterBean;
@@ -27,8 +24,9 @@ import cn.ixuehu.smartpeking.bean.NewsCenterBean;
  * 包名：cn.ixuehu.smartpeking.base.newscenter
  * Created by daimaren on 2016/1/4.
  */
-public class NewsMenuController extends MenuController implements ViewPager.OnPageChangeListener {
+public class NewsMenuController extends MenuController {
 
+    private static final String	TAG	= "NewsMenuController";
    @ViewInject(R.id.newscenter_news_pager)
     private ViewPager			mPager;	// ViewPager
 
@@ -54,39 +52,31 @@ public class NewsMenuController extends MenuController implements ViewPager.OnPa
     }
 
     @Override
-    public void onPageScrolled(int position, float positionOffset, int positionOffsetPixels) {
-
-    }
-
-    @Override
-    public void onPageSelected(int position) {
-        SlidingMenu menu= ((MainUI)mContext).getSlidingMenu();
-        menu.setTouchModeAbove(position == 0 ? SlidingMenu.TOUCHMODE_FULLSCREEN : SlidingMenu.TOUCHMODE_NONE);
-    }
-
-    @Override
-    public void onPageScrollStateChanged(int state) {
-
-    }
-
-    @Override
     public void initData() {
         mPager.setAdapter(new NewsPagerAdapter());
         mIndicator.setViewPager(mPager);
 
-        mIndicator.setOnPageChangeListener(this);
+        //mIndicator.setOnPageChangeListener(this);
     }
-    @OnClick(R.id.newscenter_news_arrow)
+/*    @OnClick(R.id.newscenter_news_arrow)
     public void ClickArrow(View view)
     {
         //选中下一个
         int item = mPager.getCurrentItem();
         mPager.setCurrentItem(++item);
-    }
+    }*/
     class NewsPagerAdapter extends PagerAdapter
     {
         @Override
         public Object instantiateItem(ViewGroup container, int position) {
+            /*NewsCenterBean.NewsBean Bean = mChildren.get(position);
+            NewsListController controller = new NewsListController(mContext,Bean);
+
+            View rootView = controller.getmRootView();
+            //将View添加到ViewPager中
+            container.addView(rootView);
+            controller.initData();
+            return rootView;*/
             TextView tv = new TextView(mContext);
             tv.setText(mChildren.get(position).title);
             tv.setTextSize(24);
