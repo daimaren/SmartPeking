@@ -101,6 +101,7 @@ public class NewsListController extends MenuController{
             mBitmapUtils.display(iv, url);
             container.addView(iv);
             return iv;
+
         }
 
         @Override
