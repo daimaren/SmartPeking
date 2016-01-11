@@ -33,7 +33,7 @@ import cn.ixuehu.smartpeking.utils.Constans;
  * 包名：cn.ixuehu.smartpeking.base.newscenter
  * Created by daimaren on 2016/1/7.
  */
-public class NewsListController extends MenuController{
+public class NewsListController extends MenuController implements ViewPager.OnPageChangeListener{
     private static final String TAG = "NewsListController";
     private String mUrl;
     private ListView mListView;
@@ -45,6 +45,7 @@ public class NewsListController extends MenuController{
     private LinearLayout mPointContainer;
     private List<NewsListPagerBean.NewsTopNewsBean> mPicDatas;
     private BitmapUtils mBitmapUtils;
+    private ImageView iv;
     public NewsListController(Context context,NewsCenterBean.NewsBean data) {
         super(context);
         this.mUrl = data.url;
@@ -82,7 +83,26 @@ public class NewsListController extends MenuController{
         NewsListPagerBean bean= gson.fromJson(json, NewsListPagerBean.class);
         //Log.d(TAG, "" + bean.data.topnews.get(0).title);
         mPicDatas = bean.data.topnews;
+        //动态的加载点
+        for (int i=0;i<mPicDatas.size();i++)
+        {
+            View point = new View(mContext);
+            point.setBackgroundResource(R.drawable.dot_normal);
+            LinearLayout.LayoutParams params= new LinearLayout.LayoutParams(6,6);
+            if (i != 0)
+            {
+                params.leftMargin = 8;
+            }
+            else
+            {
+                point.setBackgroundResource(R.drawable.dot_focus);
+            }
+            mPointContainer.addView(point,params);
+        }
         mPicPager.setAdapter(new TopPicPagerAdapter());
+        mPicPager.setOnPageChangeListener(this);
+        // 设置title的默认值
+        mTvTitle.setText(mPicDatas.get(0).title);
     }
     class TopPicPagerAdapter extends PagerAdapter
     {
@@ -93,11 +113,11 @@ public class NewsListController extends MenuController{
 
         @Override
         public Object instantiateItem(ViewGroup container, int position) {
-            ImageView iv =new ImageView(mContext);
+            iv =new ImageView(mContext);
             iv.setScaleType(ImageView.ScaleType.FIT_XY);
             iv.setImageResource(R.drawable.home_scroll_default);
             String url = mPicDatas.get(position).topimage;
-            url = url.replace("10.0.2.2:8080","10.13.2.138");
+            url = url.replace("10.0.2.2:8080","10.13.0.93");
             mBitmapUtils.display(iv, url);
             container.addView(iv);
             return iv;
@@ -117,4 +137,23 @@ public class NewsListController extends MenuController{
         }
     }
 
+    @Override
+    public void onPageScrolled(int position, float positionOffset, int positionOffsetPixels) {
+
+    }
+
+    @Override
+    public void onPageSelected(int position) {
+        int childCount = mPointContainer.getChildCount();
+        for (int i = 0; i < childCount; i++) {
+            View view = mPointContainer.getChildAt(i);
+            view.setBackgroundResource(position == i ? R.drawable.dot_focus: R.drawable.dot_normal);
+        }
+        mTvTitle.setText(mPicDatas.get(position).title);
+    }
+
+    @Override
+    public void onPageScrollStateChanged(int state) {
+
+    }
 }

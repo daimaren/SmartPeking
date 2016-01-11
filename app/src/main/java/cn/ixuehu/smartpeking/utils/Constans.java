@@ -6,7 +6,7 @@ package cn.ixuehu.smartpeking.utils;
  * Created by daimaren on 2016/1/4.
  */
 public interface Constans {
-    String	BASE_URL		= "http://10.13.2.138/zhbj";
+    String	BASE_URL		= "http://10.13.0.93/zhbj";
     /**
      * 新闻中心的网络接口
      */
