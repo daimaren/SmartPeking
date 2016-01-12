@@ -120,6 +120,7 @@ public class NewsListController extends MenuController implements ViewPager.OnPa
             url = url.replace("10.0.2.2:8080","10.13.0.93");
             mBitmapUtils.display(iv, url);
             container.addView(iv);
+
             return iv;
 
         }
