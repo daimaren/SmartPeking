@@ -70,7 +70,6 @@ public class NewsListController extends MenuController implements ViewPager.OnPa
         ViewUtils.inject(this,piclayout);
         //ListView
         mListView.addHeaderView(piclayout);
-
         return view;
     }
 
