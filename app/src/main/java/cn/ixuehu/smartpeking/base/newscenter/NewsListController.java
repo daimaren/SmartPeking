@@ -11,7 +11,6 @@ import android.view.ViewGroup;
 import android.widget.BaseAdapter;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
-import android.widget.ListView;
 import android.widget.TextView;
 
 import com.google.gson.Gson;
@@ -32,6 +31,7 @@ import cn.ixuehu.smartpeking.bean.NewsCenterBean;
 import cn.ixuehu.smartpeking.bean.NewsListPagerBean;
 import cn.ixuehu.smartpeking.utils.CacheUtils;
 import cn.ixuehu.smartpeking.utils.Constans;
+import cn.ixuehu.smartpeking.widget.RefreshListView;
 
 /**
  * 项目名：SmartPeking
@@ -52,7 +52,7 @@ public class NewsListController extends MenuController implements ViewPager.OnPa
     private ImageView iv;
     private AutoSwitchPicTask		mAutoSwitchTask;
     @ViewInject(R.id.news_list_view)
-    private ListView mListView;
+    private RefreshListView mListView;
     private List<NewsListPagerBean.NewsItemBean>  mNewsDatas;
     public NewsListController(Context context,NewsCenterBean.NewsBean data) {
         super(context);
@@ -69,7 +69,7 @@ public class NewsListController extends MenuController implements ViewPager.OnPa
         //ViewUtils注入
         ViewUtils.inject(this,piclayout);
         //ListView
-        mListView.addHeaderView(piclayout);
+        mListView.addCustomHeaderView(piclayout);
         return view;
     }
 
