@@ -1,2 +1,3 @@
 include ':app', ':slidingMenu_lib', ':xUtils_lib', ':viewPagerIndicator_lib'
 
+include ':animator_lib'

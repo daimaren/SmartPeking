@@ -12,6 +12,7 @@ import android.widget.BaseAdapter;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.google.gson.Gson;
 import com.lidroid.xutils.BitmapUtils;
@@ -38,7 +39,7 @@ import cn.ixuehu.smartpeking.widget.RefreshListView;
  * 包名：cn.ixuehu.smartpeking.base.newscenter
  * Created by daimaren on 2016/1/7.
  */
-public class NewsListController extends MenuController implements ViewPager.OnPageChangeListener{
+public class NewsListController extends MenuController implements ViewPager.OnPageChangeListener,RefreshListView.OnRefreshListener{
     private static final String TAG = "NewsListController";
     private String mUrl;
     @ViewInject(R.id.news_list_pic_pager)
@@ -60,6 +61,12 @@ public class NewsListController extends MenuController implements ViewPager.OnPa
     }
 
     @Override
+    public void onRefreshing() {
+        String url= Constans.BASE_URL + mUrl;
+        getDataFromNet(url, true);
+    }
+
+    @Override
     protected View initView(Context context) {
         mBitmapUtils = new BitmapUtils(mContext);
         View  view = View.inflate(mContext, R.layout.news_list_pager,null);
@@ -70,12 +77,12 @@ public class NewsListController extends MenuController implements ViewPager.OnPa
         ViewUtils.inject(this,piclayout);
         //ListView
         mListView.addCustomHeaderView(piclayout);
+        mListView.setOnRefreshListener(this);
         return view;
     }
 
     @Override
     public void initData() {
-        HttpUtils utils = new HttpUtils();
         String url= Constans.BASE_URL + mUrl;
         //加入网路数据缓存
         String json = CacheUtils.getString(mContext,url);
@@ -84,19 +91,34 @@ public class NewsListController extends MenuController implements ViewPager.OnPa
             processData(json);
             return;
         }
+        getDataFromNet(url, false);
+    }
+
+    private void getDataFromNet(String url, final boolean refresh) {
+        HttpUtils utils = new HttpUtils();
         utils.send(HttpRequest.HttpMethod.GET, url, new RequestCallBack<String>() {
             @Override
             public void onSuccess(ResponseInfo<String> responseInfo) {
                 String result = responseInfo.result;
                 processData(result);
+                if (refresh)
+                {
+                    mListView.setRefreshFinish();
+                }
+
             }
 
             @Override
             public void onFailure(HttpException error, String msg) {
-
+                if (refresh)
+                {
+                    mListView.setRefreshFinish();
+                    Toast.makeText(mContext, "get data from net failed", Toast.LENGTH_SHORT).show();
+                }
             }
         });
     }
+
     private void processData(String json)
     {
         Gson gson = new Gson();

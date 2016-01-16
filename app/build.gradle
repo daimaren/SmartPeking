@@ -29,4 +29,5 @@ dependencies {
     compile project(':xUtils_lib')
     compile files('libs/gson-2.2.1.jar')
     compile project(':viewPagerIndicator_lib')
+    compile project(':animator_lib')
 }

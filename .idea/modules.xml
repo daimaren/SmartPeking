@@ -3,6 +3,7 @@
   <component name="ProjectModuleManager">
     <modules>
       <module fileurl="file://$PROJECT_DIR$/SmartPeking-master.iml" filepath="$PROJECT_DIR$/SmartPeking-master.iml" />
+      <module fileurl="file://$PROJECT_DIR$/animator_lib/animator_lib.iml" filepath="$PROJECT_DIR$/animator_lib/animator_lib.iml" />
       <module fileurl="file://$PROJECT_DIR$/app/app.iml" filepath="$PROJECT_DIR$/app/app.iml" />
       <module fileurl="file://$PROJECT_DIR$/slidingMenu_lib/slidingMenu_lib.iml" filepath="$PROJECT_DIR$/slidingMenu_lib/slidingMenu_lib.iml" />
       <module fileurl="file://$PROJECT_DIR$/viewPagerIndicator_lib/viewPagerIndicator_lib.iml" filepath="$PROJECT_DIR$/viewPagerIndicator_lib/viewPagerIndicator_lib.iml" />

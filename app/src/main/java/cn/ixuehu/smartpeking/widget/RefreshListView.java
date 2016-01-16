@@ -27,6 +27,7 @@ public class RefreshListView extends ListView {
 
     private int mCurrentState = STATE_PULL_DOWN_REFRESH;
     private LinearLayout mHeaderLayout;
+    private LinearLayout mFooterLayout;
     private View mCustomView;
     private View mRefreshView;
 
@@ -38,11 +39,14 @@ public class RefreshListView extends ListView {
     private int mDownX;
     private int mDownY;
     private int mRefreshHeight;
+    private int mFooterHeight;
     private final String TAG = "RefreshListView";
 
     private RotateAnimation down2UpAnimation;
     private RotateAnimation up2DownAnimation;
     private int mPaddingTop;
+
+    private OnRefreshListener	mListener;
     public RefreshListView(Context context, AttributeSet attrs) {
         super(context, attrs);
         initHeaderlayout();
@@ -52,6 +56,7 @@ public class RefreshListView extends ListView {
     public RefreshListView(Context context) {
         super(context);
         initHeaderlayout();
+        initFooterlayout();
         initAnimation();
     }
 
@@ -83,8 +88,17 @@ public class RefreshListView extends ListView {
         mRefreshView.measure(0, 0);
         mRefreshHeight = mRefreshView.getMeasuredHeight();
         //Log.d(TAG, "刷新部分的高度:" + mRefreshHeight);
-        mHeaderLayout.setPadding(0, - mRefreshHeight, 0, 0);
+        mHeaderLayout.setPadding(0, -mRefreshHeight, 0, 0);
 
+    }
+    private void initFooterlayout()
+    {
+        mFooterLayout = (LinearLayout) View.inflate(getContext(), R.layout.refresh_footer_layout, null);
+        this.addFooterView(mFooterLayout);
+        //初始隐藏起来
+        mFooterLayout.measure(0,0);
+        mFooterHeight = mFooterLayout.getMeasuredHeight();
+        mFooterLayout.setPadding(0,- mFooterHeight,0,0);
     }
 
     public void addCustomHeaderView(View view) {
@@ -137,12 +151,18 @@ public class RefreshListView extends ListView {
                 //松开时如果是释放刷新就设置paddingTop为0
                 if (mCurrentState == STATE_RELEASE_REFRESH)
                 {
+                    //释放刷新
                     mCurrentState = STATE_REFRESHING;
                     refreshUI();
+                    //调用接口，通知正在刷新
+                    if (mListener != null)
+                    {
+                        mListener.onRefreshing();
+                    }
                 }
                 if (mCurrentState == STATE_PULL_DOWN_REFRESH)
                 {
-
+                    //下拉刷新
                 }
                 break;
         }
@@ -177,5 +197,21 @@ public class RefreshListView extends ListView {
                 mTvState.setText("释放刷新");
                 break;
         }
+    }
+    public void setOnRefreshListener(OnRefreshListener lintener)
+    {
+        this.mListener = lintener;
+    }
+    public interface OnRefreshListener
+    {
+        //正在刷新时的回调
+        void onRefreshing();
+    }
+    public void setRefreshFinish()
+    {
+        //状态回到下拉刷新
+        mCurrentState = STATE_PULL_DOWN_REFRESH;
+        //更新UI
+        refreshUI();
     }
 }
