@@ -7,6 +7,7 @@ import android.view.MotionEvent;
 import android.view.View;
 import android.view.animation.Animation;
 import android.view.animation.RotateAnimation;
+import android.widget.AbsListView;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.ListView;
@@ -20,7 +21,7 @@ import cn.ixuehu.smartpeking.R;
  * 包名：cn.ixuehu.smartpeking.widget
  * Created by daimaren on 2016/1/14.
  */
-public class RefreshListView extends ListView {
+public class RefreshListView extends ListView implements ListView.OnScrollListener{
     private static final int STATE_PULL_DOWN_REFRESH = 0;                 // 下拉刷新状态
     private static final int STATE_RELEASE_REFRESH = 1;                   // 松开刷新状态
     private static final int STATE_REFRESHING = 2;                        // 正在刷新状态
@@ -47,9 +48,12 @@ public class RefreshListView extends ListView {
     private int mPaddingTop;
 
     private OnRefreshListener	mListener;
+    private boolean isLoadMore;
+    private boolean noMore;
     public RefreshListView(Context context, AttributeSet attrs) {
         super(context, attrs);
         initHeaderlayout();
+        initFooterlayout();
         initAnimation();
     }
 
@@ -96,9 +100,13 @@ public class RefreshListView extends ListView {
         mFooterLayout = (LinearLayout) View.inflate(getContext(), R.layout.refresh_footer_layout, null);
         this.addFooterView(mFooterLayout);
         //初始隐藏起来
-        mFooterLayout.measure(0,0);
+        mFooterLayout.measure(0, 0);
         mFooterHeight = mFooterLayout.getMeasuredHeight();
-        mFooterLayout.setPadding(0,- mFooterHeight,0,0);
+        mFooterLayout.setPadding(0, -mFooterHeight, 0, 0);
+
+        //设置滚动的监听
+        this.setOnScrollListener(this);
+
     }
 
     public void addCustomHeaderView(View view) {
@@ -172,7 +180,7 @@ public class RefreshListView extends ListView {
     private void refreshUI() {
         switch (mCurrentState) {
             case STATE_PULL_DOWN_REFRESH:
-                Log.d(TAG, "refreshUI: 下拉刷新");
+                //Log.d(TAG, "refreshUI: 下拉刷新");
                 //1.显示箭头
                 mIvArrow.setVisibility(VISIBLE);
                 mProgressBar.setVisibility(INVISIBLE);
@@ -182,7 +190,7 @@ public class RefreshListView extends ListView {
                 mTvState.setText("下拉刷新");
                 break;
             case STATE_REFRESHING:
-                Log.d(TAG, "refreshUI: 正在刷新");
+                //Log.d(TAG, "refreshUI: 正在刷新");
                 mIvArrow.clearAnimation();
                 //1.显示箭头
                 mIvArrow.setVisibility(INVISIBLE);
@@ -202,16 +210,65 @@ public class RefreshListView extends ListView {
     {
         this.mListener = lintener;
     }
+
+    @Override
+    public void onScrollStateChanged(AbsListView absListView, int i) {
+        //最后一个是FooterView,ListView最后一个可见时
+        int lastVisiblePosition = getLastVisiblePosition();
+        int count = getAdapter().getCount() ;
+        Log.d(TAG, "lastVisiblePosition: " + lastVisiblePosition);
+        Log.d(TAG, "count: " + count);
+        if (lastVisiblePosition == count - 1
+                && (i == OnScrollListener.SCROLL_STATE_FLING
+                || i == OnScrollListener.SCROLL_STATE_IDLE))
+        {
+            if (!isLoadMore && !noMore)
+            {
+                //显示查看更多
+                mFooterLayout.setPadding(0,0,0,0);
+                setSelection(count + 2);
+                if (mListener != null)
+                {
+                    mListener.onLoadMore();
+                }
+                isLoadMore = true;
+            }
+
+        }
+    }
+
+    @Override
+    public void onScroll(AbsListView absListView, int i, int i1, int i2) {
+
+    }
+
     public interface OnRefreshListener
     {
         //正在刷新时的回调
         void onRefreshing();
+        void onLoadMore();
     }
     public void setRefreshFinish()
     {
-        //状态回到下拉刷新
-        mCurrentState = STATE_PULL_DOWN_REFRESH;
-        //更新UI
-        refreshUI();
+        // 默认有更多
+        setRefreshFinish(false);
     }
+    public void setRefreshFinish(boolean noMore)
+    {
+        if (isLoadMore)
+        {
+            mFooterLayout.setPadding(0,- mFooterHeight,0,0);
+            this.noMore = noMore;
+            isLoadMore = false;
+        }
+        else
+        {
+            this.noMore = false;
+            //状态回到下拉刷新
+            mCurrentState = STATE_PULL_DOWN_REFRESH;
+            //更新UI
+            refreshUI();
+        }
+    }
+
 }

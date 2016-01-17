@@ -1,13 +1,16 @@
 package cn.ixuehu.smartpeking.base.newscenter;
 
 import android.content.Context;
+import android.content.Intent;
 import android.os.Handler;
 import android.support.v4.view.PagerAdapter;
 import android.support.v4.view.ViewPager;
 import android.text.TextUtils;
+import android.util.Log;
 import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.AdapterView;
 import android.widget.BaseAdapter;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
@@ -26,6 +29,7 @@ import com.lidroid.xutils.view.annotation.ViewInject;
 
 import java.util.List;
 
+import cn.ixuehu.smartpeking.DetailUI;
 import cn.ixuehu.smartpeking.R;
 import cn.ixuehu.smartpeking.base.MenuController;
 import cn.ixuehu.smartpeking.bean.NewsCenterBean;
@@ -39,7 +43,8 @@ import cn.ixuehu.smartpeking.widget.RefreshListView;
  * 包名：cn.ixuehu.smartpeking.base.newscenter
  * Created by daimaren on 2016/1/7.
  */
-public class NewsListController extends MenuController implements ViewPager.OnPageChangeListener,RefreshListView.OnRefreshListener{
+public class NewsListController extends MenuController implements ViewPager.OnPageChangeListener,
+        RefreshListView.OnRefreshListener,AdapterView.OnItemClickListener{
     private static final String TAG = "NewsListController";
     private String mUrl;
     @ViewInject(R.id.news_list_pic_pager)
@@ -55,6 +60,8 @@ public class NewsListController extends MenuController implements ViewPager.OnPa
     @ViewInject(R.id.news_list_view)
     private RefreshListView mListView;
     private List<NewsListPagerBean.NewsItemBean>  mNewsDatas;
+    private String mMoreUrl;
+    private ListDataAdapter mNewsAdapter;
     public NewsListController(Context context,NewsCenterBean.NewsBean data) {
         super(context);
         this.mUrl = data.url;
@@ -64,6 +71,42 @@ public class NewsListController extends MenuController implements ViewPager.OnPa
     public void onRefreshing() {
         String url= Constans.BASE_URL + mUrl;
         getDataFromNet(url, true);
+    }
+
+    @Override
+    public void onLoadMore() {
+        if (TextUtils.isEmpty(mMoreUrl))
+        {
+            Toast.makeText(mContext, "no more data", Toast.LENGTH_SHORT).show();
+            //设置没有更多
+            mListView.setRefreshFinish(true);
+            return;
+        }
+        HttpUtils utils = new HttpUtils();
+        String url= Constans.BASE_URL + mMoreUrl;
+        utils.send(HttpRequest.HttpMethod.GET, url, new RequestCallBack<String>() {
+            @Override
+            public void onSuccess(ResponseInfo<String> responseInfo) {
+                String result = responseInfo.result;
+                //解析Json
+                Gson gson = new Gson();
+                NewsListPagerBean bean= gson.fromJson(result, NewsListPagerBean.class);
+                List<NewsListPagerBean.NewsItemBean> news = bean.data.news;
+                //给ListView添加数据
+                mNewsDatas.addAll(news);
+                //更新ListView
+                mNewsAdapter.notifyDataSetChanged();
+                mMoreUrl = bean.data.more;
+                //设置加载完成
+                mListView.setRefreshFinish();
+            }
+
+            @Override
+            public void onFailure(HttpException error, String msg) {
+                //设置加载完成
+                mListView.setRefreshFinish();
+            }
+        });
     }
 
     @Override
@@ -77,7 +120,9 @@ public class NewsListController extends MenuController implements ViewPager.OnPa
         ViewUtils.inject(this,piclayout);
         //ListView
         mListView.addCustomHeaderView(piclayout);
+        //设置刷新监听
         mListView.setOnRefreshListener(this);
+        mListView.setOnItemClickListener(this);
         return view;
     }
 
@@ -126,6 +171,7 @@ public class NewsListController extends MenuController implements ViewPager.OnPa
         //Log.d(TAG, "" + bean.data.topnews.get(0).title);
         mNewsDatas = bean.data.news;
         mPicDatas = bean.data.topnews;
+        mMoreUrl = bean.data.more;
         //每次加载数据前清空mPointContainer
         mPointContainer.removeAllViews();
         //动态的加载点
@@ -168,8 +214,27 @@ public class NewsListController extends MenuController implements ViewPager.OnPa
             }
         });
         //ListView数据适配器
-        mListView.setAdapter(new ListDataAdapter());
+        mNewsAdapter = new ListDataAdapter();
+        mListView.setAdapter(mNewsAdapter);
     }
+
+    @Override
+    public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
+        if (mNewsDatas ==null)
+            return;
+        int position = i - 1;
+        Log.d(TAG,"" + position);
+        if (position >= mNewsDatas.size())
+        {
+            return;
+        }
+        NewsListPagerBean.NewsItemBean newsItemBean = mNewsDatas.get(i);
+
+        Intent intent = new Intent(mContext, DetailUI.class);
+        intent.putExtra(DetailUI.KEY_URL,newsItemBean.url);
+        mContext.startActivity(intent);
+    }
+
     class ViewHolder
     {
         ImageView	ivIcon;
@@ -305,4 +370,6 @@ public class NewsListController extends MenuController implements ViewPager.OnPa
     public void onPageScrollStateChanged(int state) {
 
     }
+
+
 }
