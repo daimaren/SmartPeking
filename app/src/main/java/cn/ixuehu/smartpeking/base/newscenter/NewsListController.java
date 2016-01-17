@@ -2,6 +2,7 @@ package cn.ixuehu.smartpeking.base.newscenter;
 
 import android.content.Context;
 import android.content.Intent;
+import android.graphics.Color;
 import android.os.Handler;
 import android.support.v4.view.PagerAdapter;
 import android.support.v4.view.ViewPager;
@@ -166,6 +167,8 @@ public class NewsListController extends MenuController implements ViewPager.OnPa
 
     private void processData(String json)
     {
+        mListView.setTime(System.currentTimeMillis());
+
         Gson gson = new Gson();
         NewsListPagerBean bean= gson.fromJson(json, NewsListPagerBean.class);
         //Log.d(TAG, "" + bean.data.topnews.get(0).title);
@@ -229,6 +232,9 @@ public class NewsListController extends MenuController implements ViewPager.OnPa
             return;
         }
         NewsListPagerBean.NewsItemBean newsItemBean = mNewsDatas.get(i);
+        //设置已查看
+        CacheUtils.setBoolean(mContext," " + newsItemBean.id ,true);
+        mNewsAdapter.notifyDataSetChanged();
 
         Intent intent = new Intent(mContext, DetailUI.class);
         intent.putExtra(DetailUI.KEY_URL,newsItemBean.url);
@@ -288,6 +294,9 @@ public class NewsListController extends MenuController implements ViewPager.OnPa
             //加载网络图片
             String url = newsItemBean.listimage.replace("10.0.2.2:8080",Constans.LOCAL_IP);
             mBitmapUtils.display(viewHolder.ivIcon,url);
+            //改变已读新闻颜色
+            boolean bIsHaveView = CacheUtils.getBoolean(mContext, "" + newsItemBean.id);
+            viewHolder.tvTitle.setTextColor(bIsHaveView ? Color.GRAY : Color.BLACK);
             return view;
         }
     }

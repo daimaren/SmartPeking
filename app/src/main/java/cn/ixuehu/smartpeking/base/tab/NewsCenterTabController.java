@@ -143,5 +143,16 @@ public class NewsCenterTabController extends TabController{
 
         // 加载数据
         menuController.initData();
+        //判断是否显示切换按钮
+        if (menuController instanceof PicMenuController)
+        {
+            mIbListOrGrid.setVisibility(View.VISIBLE);
+            ((PicMenuController)menuController).setSwitchButton(mIbListOrGrid);
+        }
+        else
+        {
+            mIbListOrGrid.setVisibility(View.GONE);
+        }
+
     }
 }

@@ -32,7 +32,7 @@ public abstract class TabController implements ImageButton.OnClickListener
 	protected ImageButton	mIbMenu;
 	protected TextView		mTvTitle;
 	protected FrameLayout	mContentContainer;
-
+	protected ImageButton  mIbListOrGrid;
 	public TabController(Context context) {
 		this.mContext = context;
 		mRootView = initView(context);
@@ -48,6 +48,7 @@ public abstract class TabController implements ImageButton.OnClickListener
 		View view = View.inflate(mContext, R.layout.base_tab, null);
 
 		mIbMenu = (ImageButton) view.findViewById(R.id.tab_ib_menu);
+		mIbListOrGrid = (ImageButton) view.findViewById(R.id.tab_ib_list_or_grid);
 		mTvTitle = (TextView) view.findViewById(R.id.tab_tv_title);
 		mContentContainer = (FrameLayout) view.findViewById(R.id.tab_container_content);
 

@@ -14,6 +14,9 @@ import android.widget.ListView;
 import android.widget.ProgressBar;
 import android.widget.TextView;
 
+import java.text.SimpleDateFormat;
+import java.util.Date;
+
 import cn.ixuehu.smartpeking.R;
 
 /**
@@ -253,8 +256,15 @@ public class RefreshListView extends ListView implements ListView.OnScrollListen
         // 默认有更多
         setRefreshFinish(false);
     }
+    public void setTime(long time)
+    {
+        mTvTime.setText(getDataString(time));
+    }
     public void setRefreshFinish(boolean noMore)
     {
+        //设置刷新时间
+        long time = System.currentTimeMillis();
+        mTvTime.setText(getDataString(time));
         if (isLoadMore)
         {
             mFooterLayout.setPadding(0,- mFooterHeight,0,0);
@@ -269,6 +279,11 @@ public class RefreshListView extends ListView implements ListView.OnScrollListen
             //更新UI
             refreshUI();
         }
+    }
+    private String getDataString(long time)
+    {
+        SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd hh:mm:ss");
+        return sdf.format(new Date(time));
     }
 
 }
