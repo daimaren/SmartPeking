@@ -79,13 +79,13 @@ public class PicMenuController extends MenuController{
         return view;
     }
 
-    public void setSwitchButton(final ImageButton mIbListOrGrid) {
+    public void setSwitchButton(ImageButton mIbListOrGrid) {
         mIbListOrGrid.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 isGrid = ! isGrid;
                 mListView.setVisibility(isGrid ? View.GONE:View.VISIBLE);
-                mListView.setVisibility(isGrid ? View.VISIBLE : View.GONE);
+                mGridView.setVisibility(isGrid ? View.VISIBLE : View.GONE);
                 ((ImageButton)view).setImageResource(isGrid ? R.drawable.icon_pic_grid_type :
                         R.drawable.icon_pic_list_type);
             }
@@ -105,7 +105,7 @@ public class PicMenuController extends MenuController{
         public Object getItem(int i) {
             if (mNewsPics != null)
                 return  mNewsPics.get(i);
-            return 0;
+            return null;
         }
 
         @Override
@@ -132,7 +132,8 @@ public class PicMenuController extends MenuController{
             //赋值
             holder.tvTitle.setText(mNewsPics.get(i).title);
             holder.ivIcon.setImageResource(R.drawable.pic_item_list_default);
-            bmpUtils.display(holder.ivIcon,mNewsPics.get(i).url);
+            String url = mNewsPics.get(i).listimage.replace("10.0.2.2:8080",Constans.LOCAL_IP);
+            bmpUtils.display(holder.ivIcon,url);
             return view;
         }
     }

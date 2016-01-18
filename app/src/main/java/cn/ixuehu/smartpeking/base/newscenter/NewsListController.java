@@ -231,9 +231,9 @@ public class NewsListController extends MenuController implements ViewPager.OnPa
         {
             return;
         }
-        NewsListPagerBean.NewsItemBean newsItemBean = mNewsDatas.get(i);
+        NewsListPagerBean.NewsItemBean newsItemBean = mNewsDatas.get(position);
         //设置已查看
-        CacheUtils.setBoolean(mContext," " + newsItemBean.id ,true);
+        CacheUtils.setBoolean(mContext,"" + newsItemBean.id ,true);
         mNewsAdapter.notifyDataSetChanged();
 
         Intent intent = new Intent(mContext, DetailUI.class);
